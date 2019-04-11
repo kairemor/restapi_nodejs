@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser')
 const morgan  = require('morgan')
 const http = require('http')
 const session = require('express-session')
-const fileStore = require('session-file-store').session();
+const fileStore = require('session-file-store')session();
 
 const DishRouter = require('./routes/DishRouter')
 const LeaderRouter = require('./routes/leaderRouter')
@@ -66,7 +66,7 @@ app.use(session({
 // } 
 function auth(req, res, next){
     console.log(req.headers); 
-    console.log('session header ', req.sessio)
+    console.log('session header ', req.session)
 
     if (!req.session.user){
         var authorization = req.headers.authorization ; 
