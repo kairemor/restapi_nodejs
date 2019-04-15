@@ -9,6 +9,7 @@ const fileStore = require('session-file-store')(session);
 const DishRouter = require('./routes/DishRouter')
 const LeaderRouter = require('./routes/leaderRouter')
 const PromotionRouter = require('./routes/promoRouter')
+const UserRouter = require('./routes/UserRouter')
 const hostname = 'localhost'
 const port  = 3000 
 
@@ -16,6 +17,8 @@ const app = express()
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
+app.use(express.static(__dirname+'/public'));
+app.use('/users', UserRouter)
 // app.use(cookieParser('kairemor-12345'))
 app.use(session({
     name : 'session_id',
@@ -34,7 +37,7 @@ app.use(session({
 
 //         if (!authorization){
 //             var error = new Error("You're not authenticate guys "); 
-//             res.setHeader("WWW-Authenticate", "Basic"); 
+//          
 //             res.statusCode = 401 ; 
 //             return next(error); 
 //         }
@@ -49,7 +52,7 @@ app.use(session({
 //             return next() ; 
 //         }else{
 //             var error = new Error("You're not authenticate guys "); 
-//             res.setHeader("WWW-Authenticate", "Basic"); 
+//          
 //             res.statusCode = 401 ; 
 //             return next(error);            
 //         }
@@ -58,54 +61,71 @@ app.use(session({
 //             return next();
 //         }else{
 //             var error = new Error("You're not authenticate guys "); 
-//             res.setHeader("WWW-Authenticate", "Basic"); 
+//          
 //             res.statusCode = 401 ; 
 //             return next(error);   
 //         }
 //     }
 // } 
+// function auth(req, res, next){
+//     console.log(req.headers); 
+//     console.log('session header ', req.session)
+
+//     if (!req.session.user){
+//         var authorization = req.headers.authorization ; 
+
+//         if (!authorization){
+//             var error = new Error("You're not authenticate guys "); 
+//          
+//             res.statusCode = 401 ; 
+//             return next(error); 
+//         }
+    
+//         var auth = new Buffer.from(authorization.split(' ')[1], 'base64').toString().split(':'); 
+    
+//         var username = auth[0];
+//         var passwd = auth[1];
+    
+//         if (username === 'admin' && passwd === 'password'){
+//             req.session.user = 'admin' ;
+//             return next() ; 
+//         }else{
+//             var error = new Error("You're not authenticate guys "); 
+//          
+//             res.statusCode = 401 ; 
+//             return next(error);            
+//         }
+//     }else{
+//         if(req.session.user === 'admin'){
+//             return next();
+//         }else{
+//             var error = new Error("You're not authenticate guys "); 
+//          
+//             res.statusCode = 401 ; 
+//             return next(error);   
+//         }
+//     }
+// } 
+
 function auth(req, res, next){
     console.log(req.headers); 
     console.log('session header ', req.session)
 
     if (!req.session.user){
-        var authorization = req.headers.authorization ; 
-
-        if (!authorization){
-            var error = new Error("You're not authenticate guys "); 
-            res.setHeader("WWW-Authenticate", "Basic"); 
-            res.statusCode = 401 ; 
-            return next(error); 
-        }
-    
-        var auth = new Buffer.from(authorization.split(' ')[1], 'base64').toString().split(':'); 
-    
-        var username = auth[0];
-        var passwd = auth[1];
-    
-        if (username === 'admin' && passwd === 'password'){
-            req.session.user = 'admin' ;
-            return next() ; 
-        }else{
-            var error = new Error("You're not authenticate guys "); 
-            res.setHeader("WWW-Authenticate", "Basic"); 
-            res.statusCode = 401 ; 
-            return next(error);            
-        }
+        var error = new Error("You're not authenticate guys "); 
+        res.statusCode = 401 ; 
+        return next(error); 
     }else{
-        if(req.session.user === 'admin'){
+        if(req.session.user === 'authenticated'){
             return next();
         }else{
             var error = new Error("You're not authenticate guys "); 
-            res.setHeader("WWW-Authenticate", "Basic"); 
             res.statusCode = 401 ; 
             return next(error);   
         }
     }
 } 
-
 app.use(auth); 
-app.use(express.static(__dirname+'/public'));
 app.use('/dishes', DishRouter) 
 app.use('/promotions', PromotionRouter)
 app.use('/leaders', LeaderRouter)
