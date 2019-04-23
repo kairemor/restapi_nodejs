@@ -8,11 +8,6 @@ const Promotion = require('../models/promotions')
 const PromotionRouter = express.Router();
 PromotionRouter.use(bodyParser.json())
 
-const connect = mongoose.connect(url);
-connect.then(db => {
-    console.log("Succefully connected to the bd ConFusion")
-}, err => console.log(err, "No Connexion !!!"))
-
 
 PromotionRouter.route('/:promoId')
     .get((req, res, next) => {

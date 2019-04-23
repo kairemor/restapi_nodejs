@@ -5,124 +5,50 @@ const morgan  = require('morgan')
 const http = require('http')
 const session = require('express-session')
 const fileStore = require('session-file-store')(session);
+const passport  = require('passport')
+const authenticate = require('./authenticate')
+const mongoose = require('mongoose')
 
 const DishRouter = require('./routes/DishRouter')
 const LeaderRouter = require('./routes/leaderRouter')
 const PromotionRouter = require('./routes/promoRouter')
 const UserRouter = require('./routes/UserRouter')
 const hostname = 'localhost'
-const port  = 3000 
-
+const port  = 3100 
+const url = 'mongodb://localhost:27017/conFusion'
 const app = express()
+
+const connect = mongoose.connect(url, {useNewUrlParser:true })
+connect.then(db => {
+    console.log('Connexion to db succes'); 
+})
+.catch(err => console.log(err));
+
+
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(express.static(__dirname+'/public'));
 app.use('/users', UserRouter)
-// app.use(cookieParser('kairemor-12345'))
+
+
 app.use(session({
-    name : 'session_id',
     secret:'kairemor-12345',
     saveUninitialized: false,
-    resave: false , 
-    store : new fileStore()
+    resave: false,
+    save : fileStore()
 }))
-
-// function auth(req, res, next){
-//     console.log(req.headers); 
-//     console.log('Cookie header ', req.cookie)
-
-//     if (!req.signedCookies.user){
-//         var authorization = req.headers.authorization ; 
-
-//         if (!authorization){
-//             var error = new Error("You're not authenticate guys "); 
-//          
-//             res.statusCode = 401 ; 
-//             return next(error); 
-//         }
-    
-//         var auth = new Buffer.from(authorization.split(' ')[1], 'base64').toString().split(':'); 
-    
-//         var username = auth[0];
-//         var passwd = auth[1];
-    
-//         if (username === 'admin' && passwd === 'password'){
-//             res.cookie('user', 'admin', {signed:true}) ;
-//             return next() ; 
-//         }else{
-//             var error = new Error("You're not authenticate guys "); 
-//          
-//             res.statusCode = 401 ; 
-//             return next(error);            
-//         }
-//     }else{
-//         if(req.signedCookies.user === 'admin'){
-//             return next();
-//         }else{
-//             var error = new Error("You're not authenticate guys "); 
-//          
-//             res.statusCode = 401 ; 
-//             return next(error);   
-//         }
-//     }
-// } 
-// function auth(req, res, next){
-//     console.log(req.headers); 
-//     console.log('session header ', req.session)
-
-//     if (!req.session.user){
-//         var authorization = req.headers.authorization ; 
-
-//         if (!authorization){
-//             var error = new Error("You're not authenticate guys "); 
-//          
-//             res.statusCode = 401 ; 
-//             return next(error); 
-//         }
-    
-//         var auth = new Buffer.from(authorization.split(' ')[1], 'base64').toString().split(':'); 
-    
-//         var username = auth[0];
-//         var passwd = auth[1];
-    
-//         if (username === 'admin' && passwd === 'password'){
-//             req.session.user = 'admin' ;
-//             return next() ; 
-//         }else{
-//             var error = new Error("You're not authenticate guys "); 
-//          
-//             res.statusCode = 401 ; 
-//             return next(error);            
-//         }
-//     }else{
-//         if(req.session.user === 'admin'){
-//             return next();
-//         }else{
-//             var error = new Error("You're not authenticate guys "); 
-//          
-//             res.statusCode = 401 ; 
-//             return next(error);   
-//         }
-//     }
-// } 
+app.use(passport.initialize()); 
+app.use(passport.session());
 
 function auth(req, res, next){
-    console.log(req.headers); 
-    console.log('session header ', req.session)
-
-    if (!req.session.user){
-        var error = new Error("You're not authenticate guys "); 
-        res.statusCode = 401 ; 
-        return next(error); 
+    console.log('UserInformation'+ req.user); 
+    console.log('session header '+ req.session)
+    if (!req.user){
+        var err = new Error("You're not authenticate merci "); 
+        res.statusCode = 403 ;  
     }else{
-        if(req.session.user === 'authenticated'){
-            return next();
-        }else{
-            var error = new Error("You're not authenticate guys "); 
-            res.statusCode = 401 ; 
-            return next(error);   
-        }
+        next();
     }
 } 
 app.use(auth); 

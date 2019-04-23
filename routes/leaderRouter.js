@@ -8,11 +8,6 @@ const Leaders = require('../models/promotions')
 const LeaderRouter = express.Router();
 LeaderRouter.use(bodyParser.json())
 
-const connect = mongoose.connect(url);
-connect.then(db => {
-        console.log("Succefully connected to the bd ConFusion")
-    }, err => console.log(err, "No Connexion !!!"))
-   
 
 LeaderRouter.route('/:leaderId')
     .get((req, res, next) => {

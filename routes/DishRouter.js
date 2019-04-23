@@ -8,10 +8,6 @@ const Dishe = require('../models/dishes')
 const DishRouter = express.Router();
 DishRouter.use(bodyParser.json())
 
-const connect = mongoose.connect(url);
-connect.then(db => {
-    console.log("Succefully connected to the bd ConFusion")
-}, err => console.log(err, "No Connexion !!!"))
 
 
 /* 
