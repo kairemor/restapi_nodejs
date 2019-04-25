@@ -1,0 +1,50 @@
+GET http://localhost:3100/
+
+###
+GET http://localhost:3100/users
+###
+
+POST http://localhost:3100/users/signup
+Content-Type: application/json
+
+{
+    "username":"kaie",
+    "password":"mamkairesoum"
+}
+
+###
+
+POST http://localhost:3100/users/login
+Content-Type: application/json
+
+{
+    "username":"lamine",
+    "password":"mamsoum"
+}
+###
+
+GET http://localhost:3100/dishes
+
+###
+GET http://localhost:3100/promotions
+
+### 
+POST http://localhost:3100/dishes
+Content-Type: application/json
+
+{
+    "name":"mbaxall", 
+    "description":"kenn bougouko en principe",
+    "category":"rerr",
+    "label" : "plat",
+    "price":100,
+    "featured":"veu", 
+    "image":"rine",
+    "comments":[
+        {
+            "rating":1,
+            "comment":"aka sooff", 
+            "author": "mamsoum"
+        }
+    ]
+}
