@@ -1,7 +1,10 @@
 GET http://localhost:3000/
 
 ###
-GET http://localhost:3100/users
+GET http://localhost:3000/users
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFlN2E4NGM5ZTUyMTlkZWFlYzAiLCJpYXQiOjE1NTY1Mzg0NjcsImV4cCI6MTU1NjU0NDQ2N30.10I0uMmz2Uv1lI0junYOFK0mDxmgMCwivHQ-hllbMT4
+
 ###
 
 POST http://localhost:3000/users/signup
@@ -18,7 +21,7 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "username":"kairemor",
+    "username":"admin",
     "password":"mamsoum"
 }
 ###

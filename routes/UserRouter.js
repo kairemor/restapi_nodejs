@@ -20,8 +20,7 @@ UserRouter.use(session({
 }))
 
 UserRouter.route('/')
-    .get(authenticate.verifyUser, (req, res, next) => {
-        authenticate.verifyAdmin(req, res, next)
+    .get(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         User.find({})
             .then(users => {
                 res.statusCode = 200;

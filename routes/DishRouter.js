@@ -70,8 +70,8 @@ DishRouter.route('/')
             }, err => next(err))
             .catch(err => next(err))
     })
-    .post(authenticate.verifyUser, (req, res, next) => {
-        authenticate.verifyAdmin(req, res, next)
+    .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+
         Dishe.create(req.body)
             .then(dishe => {
                 res.statusCode = 200;
@@ -80,14 +80,12 @@ DishRouter.route('/')
             }, err => next(err))
             .catch(err => next(err))
     })
-    .put(authenticate.verifyUser, (req, res, next) => {
-        authenticate.verifyAdmin(req, res, next)
+    .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         res.statusCode = 403;
         res.end("The put request is not allowed in this route : /dishes ")
 
     })
-    .delete(authenticate.verifyUser, (req, res, next) => {
-        authenticate.verifyAdmin(req, res, next)
+    .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Dishe.remove({})
             .then(dishes => {
                 res.statusCode = 200;
@@ -164,8 +162,7 @@ DishRouter.route('/:dishId/comments/:commentId')
             .catch((err) => next(err));
     })
 
-    .delete(authenticate.verifyUser, (req, res, next) => {
-        authenticate.verifyAdmin(req, res, next)
+    .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Dishe.findById(req.params.dishId)
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
@@ -240,8 +237,7 @@ DishRouter.route('/:dishID/comments')
         res.statusCode = 403;
         res.end("The put request is not allowed in this route : /dishes" + req.params.dishID + 'comments')
     })
-    .delete(authenticate.verifyUser, (req, res, next) => {
-
+    .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Dishe.remove({})
             .then(dishes => {
                 if (dish != null) {

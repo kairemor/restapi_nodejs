@@ -46,6 +46,8 @@ exports.verifyAdmin = (req, res, next) => {
         res.statusCode = 403;
         const err = new Error("You're not authorize top perform this operation");
         return next(err);
+    } else {
+        next()
     }
 }
 exports.verifyOwnUser = (req, comment, next) => {
