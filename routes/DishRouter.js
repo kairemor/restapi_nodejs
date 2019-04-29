@@ -129,9 +129,7 @@ DishRouter.route('/:dishId/comments/:commentId')
             .populate('comments.author')
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
-                    console.log(req.user.username);
                     let comment = dish.comments.id(req.params.commentId);
-                    console.log(comment.author.username);
                     authenticate.verifyOwnUser(req, comment, next)
                     if (req.body.rating) {
                         dish.comments.id(req.params.commentId).rating = req.body.rating;
@@ -162,10 +160,12 @@ DishRouter.route('/:dishId/comments/:commentId')
             .catch((err) => next(err));
     })
 
-    .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Dishe.findById(req.params.dishId)
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
+                    let comment = dish.comments.id(req.params.commentId);
+                    authenticate.verifyOwnUser(req, comment, next)
                     dish.comments.id(req.params.commentId).remove();
                     dish.save()
                         .then((dish) => {
