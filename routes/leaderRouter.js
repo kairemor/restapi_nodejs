@@ -1,9 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const url = 'mongodb://localhost:27017/conFusion';
 
 const Leaders = require('../models/promotions')
+const authenticate = require('../authenticate');
 
 const LeaderRouter = express.Router();
 LeaderRouter.use(bodyParser.json())
@@ -19,22 +19,26 @@ LeaderRouter.route('/:leaderId')
             }, err => next(err))
             .catch(err => next(err))
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
-        res.end("The psot request is not allowed in this route : /Promotions/"+ req.params.leaderId )
+        res.end("The post request is not allowed in this route : /Promotions/" + req.params.leaderId)
 
     })
-    .put((req, res, next) => {
-        Leaders.findByIdAndUpdate(req.params.leaderId , {$set : req.body}, {new : true})
+    .put(authenticate.verifyUser, (req, res, next) => {
+        Leaders.findByIdAndUpdate(req.params.leaderId, {
+            $set: req.body
+        }, {
+            new: true
+        })
         return Leaders.save()
-        .then(dish => {
-            res.statusCode = 200;
-            res.setHeader('Content-type', 'application/json')
-            res.json(dish)
-        }, err => next(err))
-        .catch(err => next(err))
+            .then(dish => {
+                res.statusCode = 200;
+                res.setHeader('Content-type', 'application/json')
+                res.json(dish)
+            }, err => next(err))
+            .catch(err => next(err))
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Leaders.findByIdAndDelete(req.params.leaderId)
             .then(Promotions => {
                 res.statusCode = 200;
@@ -44,7 +48,7 @@ LeaderRouter.route('/:leaderId')
             .catch(err => next(err))
     })
 
-    LeaderRouter.route('/')
+LeaderRouter.route('/')
     .get((req, res, next) => {
         Leaders.find({})
             .then(Promotions => {
@@ -54,7 +58,7 @@ LeaderRouter.route('/:leaderId')
             }, err => next(err))
             .catch(err => next(err))
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         Leaders.create(req.body)
             .then(Leaders => {
                 res.statusCode = 200;
@@ -63,12 +67,12 @@ LeaderRouter.route('/:leaderId')
             }, err => next(err))
             .catch(err => next(err))
     })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
-        res.end("The put request is not allowed in this route : /leader " )
+        res.end("The put request is not allowed in this route : /leader ")
 
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Leaders.remove({})
             .then(Promotions => {
                 res.statusCode = 200;
@@ -79,4 +83,4 @@ LeaderRouter.route('/:leaderId')
     })
 
 
-module.exports = LeaderRouter 
+module.exports = LeaderRouter

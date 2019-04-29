@@ -6,6 +6,7 @@ const fileStore = require('session-file-store')(session);
 const passport = require('passport')
 
 const User = require('../models/user')
+const authenticate = require('../authenticate');
 
 const UserRouter = express.Router();
 UserRouter.use(bodyParser.json())
@@ -18,9 +19,9 @@ UserRouter.use(session({
     store: new fileStore()
 }))
 
-
 UserRouter.route('/')
-    .get((req, res, next) => {
+    .get(authenticate.verifyUser, (req, res, next) => {
+        authenticate.verifyAdmin(req, res, next)
         User.find({})
             .then(users => {
                 res.statusCode = 200;
@@ -56,10 +57,14 @@ UserRouter.route('/signup')
     });
 
 UserRouter.post('/login', passport.authenticate('local'), (req, res) => {
+    const token = authenticate.getToken({
+        _id: req.user._id
+    })
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.json({
         success: true,
+        token: token,
         status: 'You are successfully logged in!'
     });
 });

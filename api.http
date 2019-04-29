@@ -1,35 +1,37 @@
-GET http://localhost:3100/
+GET http://localhost:3000/
 
 ###
 GET http://localhost:3100/users
 ###
 
-POST http://localhost:3100/users/signup
+POST http://localhost:3000/users/signup
 Content-Type: application/json
 
 {
-    "username":"kaie",
-    "password":"mamkairesoum"
+    "username":"admin",
+    "password":"mamsoum"
 }
 
 ###
 
-POST http://localhost:3100/users/login
+POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "username":"lamine",
+    "username":"kairemor",
     "password":"mamsoum"
 }
 ###
 
-GET http://localhost:3100/dishes
+GET http://localhost:3000/dishes
+###
 
+GET  http://localhost:3000/dishes/5cc6d21d7e155d5260253ada
 ###
 GET http://localhost:3100/promotions
 
 ### 
-POST http://localhost:3100/dishes
+POST http://localhost:3000/dishes
 Content-Type: application/json
 
 {
@@ -44,7 +46,65 @@ Content-Type: application/json
         {
             "rating":1,
             "comment":"aka sooff", 
-            "author": "mamsoum"
+            "author": {
+                "username":"kairemor"
+            }
         }
     ]
+}
+###
+
+POST http://localhost:3000/dishes
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFlN2E4NGM5ZTUyMTlkZWFlYzAiLCJpYXQiOjE1NTY1MzM3NjksImV4cCI6MTU1NjUzOTc2OX0.um3vcP8jrgGbIWxOppT6QbVAi9IWktQ0qglUBX51il8   
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1MzM4NDMsImV4cCI6MTU1NjUzOTg0M30.-4XZJpP6URo18BjqKokcMnN3O942MCiEM2jm0RP_cpY
+
+{
+    "name":"sombi", 
+    "description":"kenn bougouko en principe",
+    "category":"rerr",
+    "label" : "plat",
+    "price":100,
+    "featured":"veu", 
+    "image":"rine",
+    "comments": []
+}
+
+###
+
+POST http://localhost:3000/dishes/5cc6dead4e28145df9790a3d/comments
+Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1MzM4NDMsImV4cCI6MTU1NjUzOTg0M30.-4XZJpP6URo18BjqKokcMnN3O942MCiEM2jm0RP_cpY
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1Mzc2NzcsImV4cCI6MTU1NjU0MzY3N30.AWkKwqDMiQ9-shsuGSWkES3adJ4fEfSPivSgFxSxzFQ
+
+
+{
+    "rating":3,
+    "comment" : "This is a comment from kairemor "
+}
+
+###
+
+GET http://localhost:3000/dishes/5cc6dead4e28145df9790a3d/comments
+###
+PUT http://localhost:3000/dishes/5cc6dead4e28145df9790a3d/comments/5cc6def14e28145df9790a3e
+Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1MzU0MzEsImV4cCI6MTU1NjU0MTQzMX0.73FEnm6wjEUZYqDVR-1SsISx_ENJ5z1y7a9F9CTW_Qs
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1Mzc2NzcsImV4cCI6MTU1NjU0MzY3N30.AWkKwqDMiQ9-shsuGSWkES3adJ4fEfSPivSgFxSxzFQ
+
+{
+    "rating":3,
+    "comment" : "This is a comment from lamine updated again"
+}
+###
+
+PUT http://localhost:3000/dishes/5cc6dead4e28145df9790a3d/comments/5cc6e1c864f5b960788225ca
+Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1MzU0MzEsImV4cCI6MTU1NjU0MTQzMX0.73FEnm6wjEUZYqDVR-1SsISx_ENJ5z1y7a9F9CTW_Qs
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFkOGY5NmJjZTUxZDc5ZTQ2NTkiLCJpYXQiOjE1NTY1Mzc2NzcsImV4cCI6MTU1NjU0MzY3N30.AWkKwqDMiQ9-shsuGSWkES3adJ4fEfSPivSgFxSxzFQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M2ZDFlN2E4NGM5ZTUyMTlkZWFlYzAiLCJpYXQiOjE1NTY1MzM3NjksImV4cCI6MTU1NjUzOTc2OX0.um3vcP8jrgGbIWxOppT6QbVAi9IWktQ0qglUBX51il8   
+
+{
+    "rating":3,
+    "comment" : "This is a comment from kairemor updated again"
 }

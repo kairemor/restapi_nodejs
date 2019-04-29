@@ -13,9 +13,10 @@ const DishRouter = require("./routes/DishRouter");
 const LeaderRouter = require("./routes/leaderRouter");
 const PromotionRouter = require("./routes/promoRouter");
 const UserRouter = require("./routes/UserRouter");
+const config = require('./config/config')
 const hostname = "localhost";
-const port = 3100;
-const url = "mongodb://localhost:27017/conFusion";
+const port = 3000;
+const url = config.mongoDBUrl;
 const app = express();
 
 const connect = mongoose.connect(url, {
@@ -26,13 +27,6 @@ connect
         console.log("Connexion to db succes");
     })
     .catch(err => console.log(err));
-app.use(
-    session({
-        secret: "kairemor-12345",
-        saveUninitialized: true,
-        resave: true,
-    })
-);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan("dev"));
@@ -40,17 +34,17 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
 app.use("/users", UserRouter);
 
-function auth(req, res, next) {
-    console.log("UserInformation" + req.user);
-    console.log("session header " + req.session);
-    if (!req.user) {
-        var err = new Error("You're not authenticate merci ");
-        res.statusCode = 403;
-    } else {
-        next();
-    }
-}
-app.use(auth);
+// function auth(req, res, next) {
+//     console.log("UserInformation" + req.user);
+//     console.log("session header " + req.session);
+//     if (!req.user) {
+//         var err = new Error("You're not authenticate merci ");
+//         res.statusCode = 403;
+//     } else {
+//         next();
+//     }
+// }
+// app.use(auth);
 app.use("/dishes", DishRouter);
 app.use("/promotions", PromotionRouter);
 app.use("/leaders", LeaderRouter);
